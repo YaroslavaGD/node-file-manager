@@ -1,5 +1,6 @@
 import os from 'node:os';
 import { osCommand } from "./commands/os.js";
+import { navigationCommand } from './commands/navigation.js';
 
 
 export async function handleCommand(input){
@@ -7,7 +8,11 @@ export async function handleCommand(input){
 
     switch (command) {
         case 'os':
-            osCommand(args);
+            await osCommand(args);
+            break;
+        case 'up':
+        case 'cd':
+            await navigationCommand(command, args);
             break;
         case '.exit':
             return 'exit';

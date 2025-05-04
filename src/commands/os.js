@@ -1,6 +1,6 @@
 import os from 'node:os';
 
-export function osCommand(args) {
+export async function osCommand(args) {
     const option = args[0];
 
     switch(option) {
