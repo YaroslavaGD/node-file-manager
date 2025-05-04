@@ -1,6 +1,7 @@
 import os from 'node:os';
 import { osCommand } from "./commands/os.js";
 import { navigationCommand } from './commands/navigation.js';
+import { lsCommand } from './commands/ls.js';
 
 
 export async function handleCommand(input){
@@ -13,6 +14,9 @@ export async function handleCommand(input){
         case 'up':
         case 'cd':
             await navigationCommand(command, args);
+            break;
+        case 'ls':
+            await lsCommand();
             break;
         case '.exit':
             return 'exit';
