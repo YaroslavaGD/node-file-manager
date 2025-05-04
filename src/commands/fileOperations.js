@@ -52,3 +52,24 @@ export async function createDirectoryCommand(args) {
     }
 
 }
+
+export async function renameFileCommand(args) {
+    try {
+        const oldPath = args[0];
+        const newFileName = args[1];
+        if (!oldPath || !newFileName) {
+            console.log('Old path or name is required');
+        } else {
+            const sourcePath = path.resolve(process.cwd(), oldPath);
+            const dir = path.dirname(sourcePath);
+            const destPath = path.join(dir, newFileName);
+
+            await fs.rename(sourcePath, destPath);
+            
+            console.log(`Renamed to ${newFileName}`);
+        }
+    } catch (error) {
+        console.log('Operation failed');
+        console.log(error);
+    }
+}
