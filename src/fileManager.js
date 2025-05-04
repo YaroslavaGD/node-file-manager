@@ -2,7 +2,7 @@ import os from 'node:os';
 import { osCommand } from "./commands/os.js";
 import { navigationCommand } from './commands/navigation.js';
 import { lsCommand } from './commands/ls.js';
-import { readFileCommand } from './commands/fileOperations.js';
+import { createDirectoryCommand, createFileCommand, readFileCommand } from './commands/fileOperations.js';
 
 
 export async function handleCommand(input){
@@ -21,6 +21,12 @@ export async function handleCommand(input){
             break;
         case 'cat':
             await readFileCommand(args);
+            break;
+        case 'add':
+            await createFileCommand(args);
+            break;
+        case 'mkdir':
+            await createDirectoryCommand(args);
             break;
         case '.exit':
             return 'exit';
