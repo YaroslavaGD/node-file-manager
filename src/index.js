@@ -1,8 +1,11 @@
 import * as readline from 'node:readline/promises';
 import process from 'node:process';
+import os from 'node:os';
 import { handleCommand } from './fileManager.js';
 
 const start = () => {
+    process.chdir(os.homedir());
+
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
