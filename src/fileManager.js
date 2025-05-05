@@ -4,6 +4,7 @@ import { navigationCommand } from './commands/navigation.js';
 import { lsCommand } from './commands/ls.js';
 import { copyFileCommand, createDirectoryCommand, createFileCommand, deleteFileCommand, moveFileCommand, readFileCommand, renameFileCommand } from './commands/fileOperations.js';
 import { calculateHashCommand } from './commands/hash.js';
+import { compressFileCommand, decompressFileCommand } from './commands/compression.js';
 
 
 export async function handleCommand(input){
@@ -44,6 +45,12 @@ export async function handleCommand(input){
                 break;
             case 'hash':
                 await calculateHashCommand(args);
+                break;
+            case 'compress':
+                await compressFileCommand(args);
+                break;
+            case 'decompress':
+                await decompressFileCommand(args);
                 break;
             case '.exit':
                 return 'exit';
