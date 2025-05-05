@@ -2,13 +2,13 @@ import path from 'node:path';
 import fs, { unlink } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
 import { createReadStream, createWriteStream } from 'node:fs';
+import { validateArgs } from '../utils/helpers.js';
 
 export async function readFileCommand(args) {
     try {
+        validateArgs(args, 1);
         const filePath = args[0];
-        if (!filePath) {
-            throw new Error('Path is required');
-        }
+
         const fullPath = path.resolve(process.cwd(), filePath);
         const readStream = createReadStream(fullPath, {encoding: 'utf-8'});
 
@@ -18,52 +18,47 @@ export async function readFileCommand(args) {
             readStream.on('error', reject);
         });
     } catch (error) {
-        console.error('Operation failed');
+        console.error('Operation failed: ', error.message);
     }
 }
 
 export async function createFileCommand(args) {
     try {
+        validateArgs(args, 1);
         const fileName = args[0];
 
-        if (!fileName) {
-            throw new Error('File name is required');
-        } else {
-            const fullPath = path.resolve(process.cwd(), fileName);
-            await fs.writeFile(fullPath, '', { flag: 'wx' });
+        const fullPath = path.resolve(process.cwd(), fileName);
 
-            console.log(`File ${fileName} created.`);
-        }
+        await fs.writeFile(fullPath, '', { flag: 'wx' });
+
+        console.log(`File ${fileName} created.`);
+
     } catch (error) {
-        console.error('Operation failed');
+        console.error('Operation failed: ', error.message);
     }
 }
 
 export async function createDirectoryCommand(args) {
     try {
+        validateArgs(args, 1);
         const dirName = args[0];
 
-        if (!dirName) {
-            throw new Error('Directory name is required');
-        }
         const fullPath = path.resolve(process.cwd(), dirName);
+
         await fs.mkdir(fullPath, { recursive: false });
 
         console.log(`Directory ${dirName} created.`);
     } catch (error) {
-        console.error('Operation failed');
-        console.error(error);
+        console.error('Operation failed: ', error.message);
     }
 
 }
 
 export async function renameFileCommand(args) {
     try {
-        const oldPath = args[0];
-        const newFileName = args[1];
-        if (!oldPath || !newFileName) {
-            throw new Error('Old path or name is required');
-        }
+        validateArgs(args, 2);
+        const [oldPath, newFileName] = args;
+
         const sourcePath = path.resolve(process.cwd(), oldPath);
         const dir = path.dirname(sourcePath);
         const destPath = path.join(dir, newFileName);
@@ -72,18 +67,14 @@ export async function renameFileCommand(args) {
         
         console.log(`Renamed to ${newFileName}`);
     } catch (error) {
-        console.error('Operation failed');
-        console.error(error);
+        console.error('Operation failed: ', error.message);
     }
 }
 
 export async function copyFileCommand(args) {
     try {
-        const sourcePath = args[0];
-        const destPath = args[1];
-        if (!sourcePath || !destPath) {
-            throw new Error('File path or destination path is required');
-        } 
+        validateArgs(args, 2);
+        const [sourcePath, destPath] = args;
 
         const from = path.resolve(process.cwd(), sourcePath);
         let to = path.resolve(process.cwd(), destPath);
@@ -110,17 +101,14 @@ export async function copyFileCommand(args) {
 
         console.log(`Copied ${sourcePath} to ${destPath}`);
     } catch (error) {
-        console.error('Operation failed');
-        console.error(error);
+        console.error('Operation failed: ', error.message);
     }
 }
 
 export async function moveFileCommand(args) {
-        const sourcePath = args[0];
-        const destPath = args[1];
-        if (!sourcePath || !destPath) {
-            throw new Error('File path and destination path are required');
-        }
+    try {
+        validateArgs(args, 2);
+        const [sourcePath, destPath] = args;
     
         const from = path.resolve(process.cwd(), sourcePath);
         let to = path.resolve(process.cwd(), destPath);
@@ -135,20 +123,21 @@ export async function moveFileCommand(args) {
         await unlink(from);
 
         console.log(`Moved ${sourcePath} to ${destPath}`);
+    } catch (error) {
+        console.error('Operation failed: ', error.message);
+    }
 }
 
 export async function deleteFileCommand(args) {
     try {
+        validateArgs(args, 1);
         const filePath = args[0];
-        if (!filePath) {
-            throw new Error('Path is required');
-        } 
 
         const fullPath = path.resolve(process.cwd(), filePath);
         
         await fs.unlink(fullPath);
         console.log(`Deleted '${filePath}'`);
     } catch (error) {
-        console.error('Operation failed');
+        console.error('Operation failed: ', error.message);
     }
 }

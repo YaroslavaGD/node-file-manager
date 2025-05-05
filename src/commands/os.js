@@ -1,6 +1,8 @@
 import os from 'node:os';
+import { validateArgs } from '../utils/helpers.js';
 
 export async function osCommand(args) {
+    validateArgs(args, 1);
     const option = args[0];
 
     switch(option) {
@@ -23,6 +25,6 @@ export async function osCommand(args) {
             console.log(os.arch());
             break;
         default:
-            console.log('Invalid OS command');
+            console.error('Invalid OS command');
     }
 }

@@ -55,11 +55,10 @@ export async function handleCommand(input){
             case '.exit':
                 return 'exit';
             default: 
-                console.log('Invalid input');
+                console.error('Invalid input');
         }
     } catch (error) {
-        console.error('Operation failed');
-        console.error(error.message);
+        console.error('Operation failed: ', error.message);
     }
     
     console.log(`${os.EOL} You are currently in ${process.cwd()}`);

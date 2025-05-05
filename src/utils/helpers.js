@@ -18,8 +18,13 @@ export async function changeDir(targetPath) {
 
         process.chdir(fullPath);
         console.log(`Changed directory to ${process.cwd()}`);
-    } catch (err) {
-        console.error('Operation failed');
-        console.error(err);
+    } catch (error) {
+        console.error('Operation failed: ', error.message);
+    }
+}
+
+export function validateArgs(args, expectedCount) {
+    if (args.length < expectedCount) {
+        throw new Error(`Expected ${expectedCount} argument(s), got ${args.length}`);
     }
 }

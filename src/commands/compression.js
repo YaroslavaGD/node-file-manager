@@ -2,19 +2,16 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { createBrotliCompress, createBrotliDecompress } from 'node:zlib';
+import { validateArgs } from '../utils/helpers.js';
 
-export async function compressFileCommand(args) {
-    const [sourcePath, destPath] = args;
-
-    if (!sourcePath || !destPath) {
-        console.error('Source and destination paths are required');
-        return;
-    }
-
-    const fullSourcePath = path.resolve(process.cwd(), sourcePath);
-    let fullDestPath = path.resolve(process.cwd(), destPath);
-
+export async function compressFileCommand(args) {    
     try {
+        validateArgs(args, 2);
+        const [sourcePath, destPath] = args;
+    
+        const fullSourcePath = path.resolve(process.cwd(), sourcePath);
+        let fullDestPath = path.resolve(process.cwd(), destPath);
+
         const destStats = await fs.promises.stat(fullDestPath).catch(() => null);
         if (destStats?.isDirectory()) {
             const sourceFileName = path.basename(fullSourcePath);
@@ -35,18 +32,14 @@ export async function compressFileCommand(args) {
     }
 }
 
-export async function decompressFileCommand(args) {
-    const [sourcePath, destPath] = args;
-
-    if (!sourcePath || !destPath) {
-        console.error('Source and destination paths are required');
-        return;
-    }
-
-    const fullSourcePath = path.resolve(process.cwd(), sourcePath);
-    const fullDestPath = path.resolve(process.cwd(), destPath);
-
+export async function decompressFileCommand(args) {    
     try {
+        validateArgs(args, 2);
+        const [sourcePath, destPath] = args;
+    
+        const fullSourcePath = path.resolve(process.cwd(), sourcePath);
+        const fullDestPath = path.resolve(process.cwd(), destPath);
+
         await pipeline(
             fs.createReadStream(fullSourcePath),
             createBrotliDecompress(),

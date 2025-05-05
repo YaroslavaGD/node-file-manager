@@ -20,7 +20,6 @@ export async function lsCommand() {
 
         console.table(result);
     } catch (error) {
-        console.error('Operation failed');
-        console.error(err);
+        console.error('Operation failed: ', error.message);
     }
 }

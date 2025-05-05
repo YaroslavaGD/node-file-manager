@@ -1,22 +1,20 @@
 import process from 'node:process';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { validateArgs } from '../utils/helpers.js';
 
 export async function navigationCommand(command, args) {
     switch (command) {
         case 'cd':
+            validateArgs(args, 1);
             const targetPath = args[0];
-            if (!targetPath) {
-                console.log('Path is required');
-                break;
-            }
             await changeDir(targetPath);
             break;
         case 'up':
             await changeDirUp();
             break;
         default:
-            console.log('Invalid navigation command');
+            console.error('Invalid navigation command');
     }
 }
 
@@ -36,9 +34,8 @@ async function changeDir(targetPath) {
 
         process.chdir(fullPath);
         console.log(`Changed directory to ${process.cwd()}`);
-    } catch (err) {
-        console.error('Operation failed');
-        console.error(err);
+    } catch (error) {
+        console.error('Operation failed: ', error.message);
     }
 }
 
