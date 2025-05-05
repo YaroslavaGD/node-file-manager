@@ -2,7 +2,7 @@ import os from 'node:os';
 import { osCommand } from "./commands/os.js";
 import { navigationCommand } from './commands/navigation.js';
 import { lsCommand } from './commands/ls.js';
-import { createDirectoryCommand, createFileCommand, readFileCommand, renameFileCommand } from './commands/fileOperations.js';
+import { copyFileCommand, createDirectoryCommand, createFileCommand, readFileCommand, renameFileCommand } from './commands/fileOperations.js';
 
 
 export async function handleCommand(input){
@@ -30,6 +30,9 @@ export async function handleCommand(input){
             break;
         case 'rn':
             await renameFileCommand(args);
+            break;
+        case 'cp':
+            await copyFileCommand(args);
             break;
         case '.exit':
             return 'exit';
