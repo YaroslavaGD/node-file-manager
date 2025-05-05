@@ -24,8 +24,9 @@ async function changeDirUp() {
 
     if (currentDir === parentDir) {
         console.log(`Already at root directory: ${currentDir}`);
+        return;
     }
-    
+
     process.chdir(parentDir);
     console.log(`Moved up to ${process.cwd()}`);
 }
