@@ -72,52 +72,48 @@ export async function renameFileCommand(args) {
 }
 
 export async function copyFileCommand(args) {
-    try {
-        validateArgs(args, 2);
-        const [sourcePath, destPath] = args;
+    validateArgs(args, 2);
+    const [sourcePath, destPath] = args;
 
-        const from = path.resolve(process.cwd(), sourcePath);
-        let to = path.resolve(process.cwd(), destPath);
+    const from = path.resolve(process.cwd(), sourcePath);
+    let to = path.resolve(process.cwd(), destPath);
 
-        let destStats;
-        try {
-            destStats = await fs.stat(to);
-        } catch {}
-
-        if (destStats?.isDirectory()) {
-            const fileName = path.basename(from);
-            to = path.join(to,fileName);
-        }
-
-        try {
-            await fs.access(to);
-            throw new Error('Destination file already exists');
-        } catch {}
-
-        await pipeline(
-            createReadStream(from),
-            createWriteStream(to)
-        );
-
-        console.log(`Copied ${sourcePath} to ${destPath}`);
-    } catch (error) {
-        console.error('Operation failed: ', error.message);
+    const sourceStats = await fs.stat(from);
+    if (!sourceStats.isFile()) {
+        throw new Error('Source must be a file');
     }
+    let destStats = await fs.stat(to);
+    if (!destStats.isDirectory()) {
+        throw new Error('Destination must be a directory');
+    }
+
+    const fileName = path.basename(from);
+    to = path.join(to,fileName);
+
+    let fileExists = false;
+    try {
+        await fs.access(to);
+        fileExists = true;
+    } catch {}
+
+    if (fileExists) {
+        throw new Error('Destination file already exists');
+    }
+
+    await pipeline(
+        createReadStream(from),
+        createWriteStream(to)
+    );
+
+    console.log(`Copied ${sourcePath} to ${destPath}`);
 }
 
 export async function moveFileCommand(args) {
     try {
         validateArgs(args, 2);
         const [sourcePath, destPath] = args;
-    
+
         const from = path.resolve(process.cwd(), sourcePath);
-        let to = path.resolve(process.cwd(), destPath);
-    
-        const destStats = await fs.stat(to).catch(() => null);
-        if (destStats?.isDirectory()) {
-            const fileName = path.basename(from);
-            to = path.join(to, fileName);
-        }
     
         await copyFileCommand([sourcePath, destPath]);
         await unlink(from);
