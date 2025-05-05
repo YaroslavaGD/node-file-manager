@@ -133,3 +133,19 @@ export async function moveFileCommand(args) {
 
         console.log(`Moved ${sourcePath} to ${destPath}`);
 }
+
+export async function deleteFileCommand(args) {
+    try {
+        const filePath = args[0];
+        if (!filePath) {
+            throw new Error('Path is required');
+        } 
+        
+        const fullPath = path.resolve(process.cwd(), filePath);
+        
+        await fs.unlink(fullPath);
+        console.log(`Deleted '${filePath}'`);
+    } catch (error) {
+        console.error('Operation failed');
+    }
+}

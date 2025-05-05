@@ -2,7 +2,8 @@ import os from 'node:os';
 import { osCommand } from "./commands/os.js";
 import { navigationCommand } from './commands/navigation.js';
 import { lsCommand } from './commands/ls.js';
-import { copyFileCommand, createDirectoryCommand, createFileCommand, moveFileCommand, readFileCommand, renameFileCommand } from './commands/fileOperations.js';
+import { copyFileCommand, createDirectoryCommand, createFileCommand, deleteFileCommand, moveFileCommand, readFileCommand, renameFileCommand } from './commands/fileOperations.js';
+import { calculateHashCommand } from './commands/hash.js';
 
 
 export async function handleCommand(input){
@@ -37,6 +38,12 @@ export async function handleCommand(input){
                 break;
             case 'mv':
                 await moveFileCommand(args);
+                break;
+            case 'rm':
+                await deleteFileCommand(args);
+                break;
+            case 'hash':
+                await calculateHashCommand(args);
                 break;
             case '.exit':
                 return 'exit';
