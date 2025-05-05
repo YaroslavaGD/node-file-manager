@@ -19,7 +19,13 @@ export async function navigationCommand(command, args) {
 }
 
 async function changeDirUp() {
+    const currentDir = process.cwd();
     const parentDir = path.dirname(process.cwd());
+
+    if (currentDir === parentDir) {
+        console.log(`Already at root directory: ${currentDir}`);
+    }
+    
     process.chdir(parentDir);
     console.log(`Moved up to ${process.cwd()}`);
 }
