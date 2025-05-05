@@ -8,12 +8,15 @@ export async function readFileCommand(args) {
         const filePath = args[0];
         if (!filePath) {
             throw new Error('Path is required');
-        } else {
-            const fullPath = path.resolve(process.cwd(), filePath);
-            const content = await fs.readFile(fullPath, { encoding: 'utf-8' });
-
-            console.log(content);
         }
+        const fullPath = path.resolve(process.cwd(), filePath);
+        const readStream = createReadStream(fullPath, {encoding: 'utf-8'});
+
+        readStream.pipe(process.stdout);
+        await new Promise((resolve, reject) => {
+            readStream.on('end', resolve);
+            readStream.on('error', reject);
+        });
     } catch (error) {
         console.error('Operation failed');
     }
@@ -140,7 +143,7 @@ export async function deleteFileCommand(args) {
         if (!filePath) {
             throw new Error('Path is required');
         } 
-        
+
         const fullPath = path.resolve(process.cwd(), filePath);
         
         await fs.unlink(fullPath);
