@@ -15,8 +15,6 @@ const start = () => {
 
     rl.on('line', async (line) => {
         const input = line.trim();
-
-        console.log(`You entered: ${input}`);
         const result = await handleCommand(input);
 
         if (result === 'exit') {
