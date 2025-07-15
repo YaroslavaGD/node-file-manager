@@ -1,0 +1,23 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "Simple CLI file manager",
+  "engines": {
+    "node": ">=22.14.0"
+  },
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YaroslavaGD/node-file-manager.git"
+  },
+  "author": "YaroslavaGD",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YaroslavaGD/node-file-manager/issues"
+  },
+  "homepage": "https://github.com/YaroslavaGD/node-file-manager#readme"
+}
